@@ -1,0 +1,158 @@
+//OBJ_DINO assign sprite, visable, persistent
+
+//**obj_dino
+//**Create Event
+image_speed = 0;
+image_index = 0;
+gravity = 0.25;
+global.jumps = 0;
+
+
+
+//**obj_dino
+//**Step Event
+//Animation
+if vspeed < 0 {
+    image_index = 0;
+    image_index = 1;
+} else if vspeed >4 {
+    image_index = 2;
+}
+
+
+
+//**obj_dino
+//**Collision with obj_tree
+game_restart();
+
+
+
+//**obj_dino
+//**Collision with obj_block
+global.jumps = 1;
+
+
+
+//**obj_dino
+//**Collision with obj_bird
+game_restart();
+
+
+
+//**obj_dino
+//**Collision with obj_score
+global.current_score += 1
+instance_destroy();
+
+
+
+//**obj_dino
+//**Glob Left Pressed
+//Sound
+//audio_play_sound(snd_jump,2,false);
+
+//Fly
+if (global.jumps > 0) 
+{
+global.jumps -= 1;
+vspeed = -4;
+}
+
+
+
+//**OBJ_TREE assign sprite
+
+//**obj_tree
+//**Step Event
+x -=4;
+if (x<=-64) {
+    instance_destroy();
+}
+
+
+
+//**OBJ_CREATOR No Sprite, visable
+
+//**obj_creator
+//**Create Event
+//Creates pillars of different heights
+alarm[0] = 48;
+//alarm[1] = 30;
+alarm[2] = 32;
+
+//h = choose(108,72,90,128);
+instance_create(room_width + 32, 128, obj_tree);
+instance_create(room_width +32, 96, obj_score);
+//instance_create(room_width + 12, 128, obj_trees);
+
+
+
+//**obj_creator
+//**Alarm 0
+//Continues to create obstacles every 48 frames
+alarm[0] = random_range(36,48);
+//h = choose(108,72,90,128);
+instance_create(room_width + 32, 128, obj_tree);
+instance_create(room_width +32, 96, obj_score);
+
+
+
+//**obj_creator
+//Alarm 2
+alarm[2] = random_range(32,60);
+instance_create(room_width + 32, 64, obj_bird);
+instance_create(room_width +32, 104, obj_score);
+
+
+
+//**OBJ_BLOCK Assign Sprite, Visable, Solid
+
+//**obj_block
+//**Draw Event
+///Nothing
+
+
+
+//**OBJ_BIRD Assign Sprite, visable
+
+//**obj_bird
+//**Step Event
+x -=4;
+if (x<=-64) {
+    instance_destroy();
+}
+
+
+
+//**OBJ_SCORE Assign Sprite, visable
+
+//**obj_score
+//**Step Event
+x -=4;
+if (x<=-64) {
+    instance_destroy();
+}
+
+
+
+//**obj_score
+//**Draw Event
+///Nothing
+
+
+
+//**OBJ_DISPLAY No Sprite, Visable
+
+//**obj_display
+//**Create Event
+//Sets Global Score at the beginning to 0
+global.current_score = 0
+
+
+
+//**obj_display
+//**Draw Event
+//Draws score to the screen
+draw_set_color(c_fuchsia);
+//draw_set_font(fnt_score);
+draw_text(x,y,"Score: "+string(global.current_score));
